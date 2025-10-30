@@ -3,7 +3,10 @@ const Lead = require('../models/Lead');
 const Offer = require('../models/Offer');
 const Result = require('../models/Result');
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+let openai;
+if (process.env.OPENAI_API_KEY) {
+  openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+}
 
 let offer = null;
 let leads = [];
@@ -28,7 +31,7 @@ function calculateRuleScore(lead, offer) {
     score += 10;
   }
   // Data completeness
-  if (lead.isComplete()) {
+  if (lead.name && lead.role && lead.company && lead.industry && lead.location && lead.linkedin_bio) {
     score += 10;
   }
   return score;
@@ -36,6 +39,9 @@ function calculateRuleScore(lead, offer) {
 
 // AI scoring
 async function calculateAIScore(lead, offer) {
+  if (!openai) {
+    return { intent: 'Low', points: 10, reasoning: 'AI not configured' };
+  }
   const prompt = `Offer: ${JSON.stringify(offer)}\nLead: ${JSON.stringify(lead)}\nClassify intent (High/Medium/Low) and explain in 1-2 sentences.`;
   try {
     const response = await openai.chat.completions.create({
