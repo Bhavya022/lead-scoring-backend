@@ -38,9 +38,9 @@ A Node.js backend service for scoring leads based on product/offer information a
 
 ## API Usage
 
-### POST /offer
+### POST /api/offer
 ```bash
-curl -X POST http://localhost:3000/offer \
+curl -X POST http://localhost:3000/api/offer \
   -H "Content-Type: application/json" \
   -d '{
     "name": "AI Outreach Automation",
@@ -49,26 +49,26 @@ curl -X POST http://localhost:3000/offer \
   }'
 ```
 
-### POST /leads/upload
+### POST /api/leads/upload
 ```bash
-curl -X POST http://localhost:3000/leads/upload \
+curl -X POST http://localhost:3000/api/leads/upload \
   -F "file=@leads.csv"
 ```
 CSV format: name,role,company,industry,location,linkedin_bio
 
-### POST /score
+### POST /api/score
 ```bash
-curl -X POST http://localhost:3000/score
+curl -X POST http://localhost:3000/api/score
 ```
 
-### GET /results
+### GET /api/results
 ```bash
-curl http://localhost:3000/results
+curl http://localhost:3000/api/results
 ```
 
-### GET /results/csv
+### GET /api/results/csv
 ```bash
-curl -o results.csv http://localhost:3000/results/csv
+curl -o results.csv http://localhost:3000/api/results/csv
 ```
 
 ## Deployment
