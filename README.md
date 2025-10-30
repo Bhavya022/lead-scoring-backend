@@ -15,15 +15,26 @@ A Node.js backend service for scoring leads based on product/offer information a
 
 ### Rule Layer (max 50 points)
 - **Role Relevance**: Decision maker (+20), Influencer (+10), else 0
+  - Decision makers: CEO, Head, Director, VP, Founder
+  - Influencers: Manager, Lead, Specialist
 - **Industry Match**: Exact ICP (+20), Adjacent (+10), else 0
+  - Exact: Industry matches any ideal_use_case
+  - Adjacent: Related industries (e.g., "Tech" if ideal includes "SaaS")
 - **Data Completeness**: All fields present (+10)
+  - Required: name, role, company, industry, location, linkedin_bio
 
 ### AI Layer (max 50 points)
 - Uses OpenAI GPT-3.5-turbo
-- Prompt: Classify intent (High/Medium/Low) and explain in 1-2 sentences
-- Mapping: High=50, Medium=30, Low=10
+- **Prompt Used**:
+  ```
+  Offer: {offer_json}
+  Lead: {lead_json}
+  Classify intent (High/Medium/Low) and explain in 1-2 sentences.
+  ```
+- **Mapping**: High=50, Medium=30, Low=10
+- **Fallback**: If AI fails (no API key, quota, error), defaults to Low (10 points) with reasoning "Error in AI classification"
 
-**Final Score** = rule_score + ai_points
+**Final Score** = rule_score + ai_points (0-100 total)
 
 ## Setup
 
@@ -40,7 +51,7 @@ A Node.js backend service for scoring leads based on product/offer information a
 
 ### POST /api/offer
 ```bash
-curl -X POST http://localhost:3000/api/offer \
+curl -X POST https://lead-scoring-c05g.onrender.com/api/offer \
   -H "Content-Type: application/json" \
   -d '{
     "name": "AI Outreach Automation",
@@ -48,28 +59,70 @@ curl -X POST http://localhost:3000/api/offer \
     "ideal_use_cases": ["B2B SaaS mid-market"]
   }'
 ```
+**Response:**
+```json
+{
+  "message": "Offer saved successfully"
+}
+```
 
 ### POST /api/leads/upload
 ```bash
-curl -X POST http://localhost:3000/api/leads/upload \
+curl -X POST https://lead-scoring-c05g.onrender.com/api/leads/upload \
   -F "file=@leads.csv"
 ```
 CSV format: name,role,company,industry,location,linkedin_bio
 
+**Response:**
+```json
+{
+  "message": "Uploaded 3 leads"
+}
+```
+
 ### POST /api/score
 ```bash
-curl -X POST http://localhost:3000/api/score
+curl -X POST https://lead-scoring-c05g.onrender.com/api/score
+```
+**Response:**
+```json
+{
+  "message": "Scoring completed",
+  "count": 3
+}
 ```
 
 ### GET /api/results
 ```bash
-curl http://localhost:3000/api/results
+curl https://lead-scoring-c05g.onrender.com/api/results
+```
+**Response:**
+```json
+[
+  {
+    "name": "Ava Patel",
+    "role": "Head of Growth",
+    "company": "FlowMetrics",
+    "intent": "High",
+    "score": 85,
+    "reasoning": "Fits ICP SaaS mid-market and role is decision maker."
+  },
+  {
+    "name": "John Doe",
+    "role": "Marketing Manager",
+    "company": "TechCorp",
+    "intent": "Medium",
+    "score": 45,
+    "reasoning": "Adjacent industry match and influencer role."
+  }
+]
 ```
 
 ### GET /api/results/csv
 ```bash
-curl -o results.csv http://localhost:3000/api/results/csv
+curl -o results.csv https://lead-scoring-c05g.onrender.com/api/results/csv
 ```
+**Response:** Downloads a CSV file with headers: name,role,company,intent,score,reasoning
 
 ## Deployment
 
@@ -82,6 +135,6 @@ Deployed on [Render](https://render.com) at: [https://lead-scoring-c05g.onrender
 - OpenAI API
 - Multer for file uploads
 - csv-parser for CSV handling
-=======
+
 # lead-scoring-backend
->>>>>>> a4b1cdbb0191119b3571c4832ae6f84695b5c5a1
+
