@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Lead Scoring Backend
 
 A Node.js backend service for scoring leads based on product/offer information and prospect data using rule-based logic and AI reasoning.
@@ -81,3 +82,6 @@ Deployed on [Render](https://render.com) at: [https://your-render-url.com](https
 - OpenAI API
 - Multer for file uploads
 - csv-parser for CSV handling
+=======
+# lead-scoring-backend
+>>>>>>> a4b1cdbb0191119b3571c4832ae6f84695b5c5a1
