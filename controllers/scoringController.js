@@ -122,5 +122,5 @@ module.exports = {
   scoreLeads,
   getResults,
   exportResultsCSV,
-  calculateRuleScore, // for testing
+  calculateRuleScore,
 };
