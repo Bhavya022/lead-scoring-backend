@@ -8,7 +8,6 @@ if (process.env.OPENAI_API_KEY) {
   openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 }
 
-// In-memory storage
 let offer = null;
 let leads = [];
 let results = [];
