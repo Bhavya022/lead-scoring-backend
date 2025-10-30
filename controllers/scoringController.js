@@ -11,33 +11,26 @@ if (process.env.OPENAI_API_KEY) {
 let offer = null;
 let leads = [];
 let results = [];
-
-// Rule-based scoring
 function calculateRuleScore(lead, offer) {
   let score = 0;
-  // Role relevance
   const role = lead.role.toLowerCase();
   if (role.includes('head') || role.includes('ceo') || role.includes('director') || role.includes('vp')) {
-    score += 20; // decision maker
+    score += 20; 
   } else if (role.includes('manager') || role.includes('lead')) {
-    score += 10; // influencer
+    score += 10;
   }
-  // Industry match
   const industry = lead.industry.toLowerCase();
   const ideal = offer.ideal_use_cases.join(' ').toLowerCase();
   if (ideal.includes(industry)) {
-    score += 20; // exact ICP
-  } else if (ideal.includes('b2b') && industry.includes('tech')) { // adjacent example
+    score += 20; 
+  } else if (ideal.includes('b2b') && industry.includes('tech')) { 
     score += 10;
   }
-  // Data completeness
   if (lead.name && lead.role && lead.company && lead.industry && lead.location && lead.linkedin_bio) {
     score += 10;
   }
   return score;
 }
-
-// AI scoring
 async function calculateAIScore(lead, offer) {
   if (!openai) {
     return { intent: 'Low', points: 10, reasoning: 'AI not configured' };
@@ -58,8 +51,6 @@ async function calculateAIScore(lead, offer) {
     return { intent: 'Low', points: 10, reasoning: 'Error in AI classification' };
   }
 }
-
-// Controller functions
 const setOffer = (req, res) => {
   const { name, value_props, ideal_use_cases } = req.body;
   if (!name || !value_props || !ideal_use_cases) {
@@ -81,7 +72,7 @@ const uploadLeads = (req, res) => {
     .pipe(csv())
     .on('data', (data) => leads.push(new Lead(data)))
     .on('end', () => {
-      fs.unlinkSync(filePath); // Remove temp file
+      fs.unlinkSync(filePath);
       res.json({ message: `Uploaded ${leads.length} leads` });
     })
     .on('error', (err) => res.status(500).json({ error: 'Error parsing CSV' }));
