@@ -1,0 +1,4 @@
+name,role,company,intent,score,reasoning
+Ava Patel,Head of Growth,FlowMetrics,Low,60,"Error in AI classification"
+John Doe,Marketing Manager,TechCorp,Low,40,"Error in AI classification"
+Jane Smith,CEO,StartupInc,Low,40,"Error in AI classification"
