@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Lead Scoring Backend
 
 A Node.js backend service for scoring leads based on product/offer information and prospect data using rule-based logic and AI reasoning.
