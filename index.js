@@ -5,6 +5,9 @@ const fs = require('fs');
 const OpenAI = require('openai');
 require('dotenv').config();
 
+// Export for testing
+module.exports = { calculateRuleScore };
+
 const app = express();
 const upload = multer({ dest: 'uploads/' });
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -44,7 +47,7 @@ app.post('/leads/upload', upload.single('file'), (req, res) => {
 });
 
 // Scoring functions
-function calculateRuleScore(lead) {
+function calculateRuleScore(lead, offer) {
   let score = 0;
   // Role relevance
   const role = lead.role.toLowerCase();
@@ -93,7 +96,7 @@ app.post('/score', async (req, res) => {
   }
   results = [];
   for (const lead of leads) {
-    const ruleScore = calculateRuleScore(lead);
+    const ruleScore = calculateRuleScore(lead, offer);
     const aiResult = await calculateAIScore(lead);
     const totalScore = ruleScore + aiResult.points;
     results.push({
