@@ -73,7 +73,7 @@ curl -o results.csv http://localhost:3000/api/results/csv
 
 ## Deployment
 
-Deployed on [Render](https://render.com) at: [https://your-render-url.com](https://your-render-url.com)
+Deployed on [Render](https://render.com) at: [https://lead-scoring-c05g.onrender.com/](https://lead-scoring-c05g.onrender.com/)
 
 ## Tech Stack
 
